@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MyMain {
     // Returns the String that shows up latest alphabetically
     // in a normal 1D String array
@@ -8,7 +10,13 @@ public class MyMain {
     //      int y = "banana".compareTo("apple"); // y is positive
     public static String findLastWord(String[] arr) {
         // YOUR CODE HERE
-        return "";
+        String posString = "";
+        for(int i = 0; i < arr.length; i ++){
+            if (posString.compareTo(arr[i]) < 0) { // if posString comes before
+                posString = arr[i];
+            }
+        }
+        return posString;
     }
 
     // Given a 2D array, return an 1D array of the last word
@@ -17,7 +25,11 @@ public class MyMain {
     // Hint: use the previous method to help yourself!
     public static String[] findLastWord2D(String[][] mat) {
         // YOUR CODE HERE
-        return null;
+        String[] lastWordString = new String[mat.length];
+        for(int i = 0; i < mat.length; i ++){
+            lastWordString[i] = findLastWord(mat[i]);
+        }
+        return lastWordString;
     }
 
     // Given a 2D array and some column index col
@@ -31,7 +43,13 @@ public class MyMain {
     // alternatively, consider the contains() method
     public static int appleCounter(String[][] mat, int col) {
         // YOUR CODE HERE
-        return -1;
+        int appleCount = 0;
+        for (String[] strings : mat) {
+            if (strings[col].contains("apple")) {
+                appleCount++;
+            }
+        }
+        return appleCount;
     }
 
     // Given a 2D array, return the column number corresponding
@@ -42,7 +60,15 @@ public class MyMain {
     // Hint 2: you might need to loop through the columns!
     public static int findMostAppleColumn(String[][] mat) {
         // YOUR CODE HERE
-        return -1;
+        int bestCol = 0;
+        int bestColAmt = 0;
+        for(int i = 0; i < mat[0].length; i ++){
+            if(appleCounter(mat, i) > bestColAmt){
+                bestColAmt = appleCounter(mat, i);
+                bestCol = i;
+            }
+        }
+        return bestCol;
     }
 
 
@@ -71,7 +97,20 @@ public class MyMain {
 
     public static int[][] pascal(int height) {
         // YOUR CODE HERE
-        return null;
+        int[][] mat = new int[height][height];
+        for(int i = 0; i < height; i ++){
+            mat[i][0] = 1;
+            mat[i][i] = 1;
+        }
+        if(height > 2){
+            for(int i = 2; i < height; i ++){
+                for(int j = 1 ; j < i; j ++){
+                    mat[i][j] = mat[i - 1][j - 1] + mat[i - 1][j];
+                }
+            }
+        }
+
+        return mat;
     }
 
 
@@ -108,7 +147,47 @@ public class MyMain {
     // * can you use a for loop that goes through that pattern?
     public static boolean isMagic(int[][] mat) {
         // YOUR CODE HERE
-        return false;
+        int compareNum = 0;
+        for(int i = 0; i < mat[0].length; i ++){
+            compareNum += mat[0][i];
+        }
+
+        //rows
+        for (int[] value : mat) {
+            int tempNum = 0;
+            for (int i : value) {
+                tempNum += i;
+            }
+            if (tempNum != compareNum) {
+                return false;
+            }
+        }
+        //cols
+        for(int i = 0; i < mat[0].length; i ++){
+            int tempNum = 0;
+            for (int[] ints : mat) {
+                tempNum += ints[i];
+            }
+            if(tempNum != compareNum){
+                return  false;
+            }
+        }
+
+
+        //diags
+        int tempNum = 0;
+        for(int i = 0; i < mat.length; i ++){
+            tempNum += mat[i][i];
+        }
+        if(tempNum != compareNum){
+            return  false;
+        }
+        tempNum = 0;
+
+        for(int i = 0; i < mat.length; i ++){
+            tempNum += mat[i][mat.length - i - 1];
+        }
+        return tempNum == compareNum;
     }
 
 
